@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Radium from 'radium';
 
-import logo from './logo.svg';
-import './App.css';
-import Person from './Person/Person';
+import classes from './App.css';
+import Person from '../components/Persons/Person/Person';
+import Persons from "../components/Persons/Persons";
+import Cockpit from "../components/Cockpit/Cockpit";
 
 class App extends Component {
   state = {
@@ -44,34 +44,19 @@ class App extends Component {
   };
 
   render () {
-    const style = {
-      backgroundColor: 'green',
-      ':hover': {
-        backgroundColor: 'lightgreen'
-      }
-    };
-
     let persons = null;
 
     if (this.state.showPersons) {
-      style.backgroundColor = 'red';
-      style.color = 'white';
-
-      style[':hover'] = {
-        backgroundColor: 'salmon',
-      };
-
       persons = (
         <div>
           <h1>All persons</h1>
-          {this.state.persons.map((person, index) =>
-            <Person
-              changed={(event) => this.nameChangedHandler({personId: person.id, newName: event.target.value})}
-              click={() => this.deletePersonHandler({personId: person.id})}
-              key={person.id} name={person.name} age={person.age}/>
-          )}
+          <Persons
+            changed={this.nameChangedHandler}
+            click={this.deletePersonHandler}
+            persons={this.state.persons}
+          />
         </div>
-      )
+      );
     }
 
     let chosenPerson = null;
@@ -86,35 +71,13 @@ class App extends Component {
         </div>
     }
 
-    let classes = [];
-
-    if (this.state.persons.length < 2) {
-      classes.push('red');
-    }
-
-    if (this.state.persons.length < 1) {
-      classes.push('bold');
-    }
-
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo"/>
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p className={classes.join(' ')}>It works</p>
-        <button
-          onClick={this.switchNameHandler}>
-          Switch Person
-        </button>
-        <button
-          style={style}
-          onClick={this.toggleAllPersons}>
-          {this.state.showPersons ? 'Hide persons' : 'Show persons'}
-        </button>
+      <div className={classes['App']}>
+        <Cockpit
+          showPersons={this.state.showPersons}
+          switch={this.switchNameHandler}
+          toggle={this.toggleAllPersons}
+        />
         {chosenPerson}
         {persons}
       </div>
@@ -122,4 +85,4 @@ class App extends Component {
   }
 }
 
-export default Radium(App);
+export default App;
