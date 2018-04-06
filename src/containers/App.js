@@ -36,7 +36,8 @@ class App extends PureComponent {
       {id: 3, name: 'Charlie', age: 32}
     ],
     currentPerson: 0,
-    showPersons: true
+    showPersons: true,
+    toggleClickCounter: 0
   };
 
   getRandomElementIndex = () => ~~(Math.random() * this.state.persons.length);
@@ -51,7 +52,11 @@ class App extends PureComponent {
   };
 
   toggleAllPersons = () => {
-    this.setState({showPersons: !this.state.showPersons});
+    const doesShow = this.state.showPersons;
+    this.setState((prevState, props) => ({
+      showPersons: !doesShow,
+      toggleClickCounter: prevState.toggleClickCounter + 1
+    }));
   };
 
   deletePersonHandler = ({personId}) => {
