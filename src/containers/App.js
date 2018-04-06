@@ -1,11 +1,34 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import classes from './App.css';
 import Person from '../components/Persons/Person/Person';
 import Persons from "../components/Persons/Persons";
 import Cockpit from "../components/Cockpit/Cockpit";
+import withClass from "../hoc/withClass";
+import Aux from "../hoc/Aux";
 
-class App extends Component {
+class App extends PureComponent {
+  constructor (props) {
+    super(props);
+    console.log("[App.js] Inside constructor");
+  }
+
+  componentWillMount () {
+    console.log("[App.js] Inside componentWillMount");
+  }
+
+  componentDidMount () {
+    console.log("[App.js] Inside componentDidMount");
+  }
+
+  componentWillUpdate (nextProps, nextState) {
+    console.log("[UPDATE App.js] Inside componentWillUpdate", nextProps, nextState);
+  }
+
+  componentDidUpdate (nextProps, nextState) {
+    console.log("[UPDATE App.js] Inside componentDidUpdate", nextProps, nextState);
+  }
+
   state = {
     persons: [
       {id: 1, name: 'John', age: 28},
@@ -44,19 +67,16 @@ class App extends Component {
   };
 
   render () {
+    console.log("[App.js] Inside render");
+
     let persons = null;
 
     if (this.state.showPersons) {
-      persons = (
-        <div>
-          <h1>All persons</h1>
-          <Persons
-            changed={this.nameChangedHandler}
-            click={this.deletePersonHandler}
-            persons={this.state.persons}
-          />
-        </div>
-      );
+      persons = <Persons
+        changed={this.nameChangedHandler}
+        clicked={this.deletePersonHandler}
+        persons={this.state.persons}
+      />;
     }
 
     let chosenPerson = null;
@@ -72,17 +92,22 @@ class App extends Component {
     }
 
     return (
-      <div className={classes['App']}>
+      <Aux>
+        <button onClick={() => {
+          this.setState({showPersons: true})
+        }}>Show Persons
+        </button>
         <Cockpit
           showPersons={this.state.showPersons}
+          persons={this.state.persons}
           switch={this.switchNameHandler}
           toggle={this.toggleAllPersons}
         />
         {chosenPerson}
         {persons}
-      </div>
+      </Aux>
     );
   }
 }
 
-export default App;
+export default withClass(App, classes.App);

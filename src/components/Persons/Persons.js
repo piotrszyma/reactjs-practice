@@ -1,14 +1,44 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import Person from './Person/Person';
 
-const persons = (props) => props.persons.map((person, index) =>
-  <Person
-    changed={(event) => props.clicked({
-      personId: person.id,
-      newName: event.target.value
-    })}
-    click={() => props.changed({personId: person.id})}
-    key={person.id} name={person.name} age={person.age}/>
-);
+class Persons extends PureComponent {
+  constructor (props) {
+    super(props);
+    console.log("[Persons.js] Inside constructor");
+  }
 
-export default persons;
+  componentWillMount () {
+    console.log("[Persons.js] Inside componentWillMount");
+  }
+
+  componentDidMount () {
+    console.log("[Persons.js] Inside componentDidMount");
+  }
+
+  componentWillReceiveProps (nextProps, currentProps) {
+    console.log("[UPDATE Persons.js] Inside componentWillReceiveProps", nextProps);
+  }
+
+  componentWillUpdate (nextProps, nextState) {
+    console.log("[UPDATE Persons.js] Inside componentWillUpdate", nextProps, nextState);
+  }
+
+  componentDidUpdate (nextProps, nextState) {
+    console.log("[UPDATE Persons.js] Inside componentDidUpdate", nextProps, nextState);
+  }
+
+
+  render () {
+    return this.props.persons.map((person, index) =>
+      <Person
+        changed={(event) => this.props.changed({
+          personId: person.id,
+          newName: event.target.value
+        })}
+        clicked={() => this.props.clicked({personId: person.id})}
+        key={person.id} name={person.name} age={person.age}/>
+    );
+  }
+}
+
+export default Persons;
